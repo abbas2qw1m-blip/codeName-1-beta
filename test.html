@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Smooth Scroll حقيقي بدون مكتبات</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    overflow: hidden; /* مهم: نمنع سكرول المتصفح الطبيعي ونتحكم فيه يدويًا */
+  }
+  body {
+    font-family: system-ui, sans-serif;
+    background: #0a0a0a;
+    color: #eee;
+  }
+  /* هذا العنصر هو اللي فعليًا يتحرك، مو الصفحة */
+  #smooth-content {
+    will-change: transform;
+  }
+
+  .section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border-bottom: 1px solid #222;
+  }
+  .section:nth-child(odd) { background: #111; }
+  .section:nth-child(even) { background: #161616; }
+</style>
+</head>
+<body>
+
+  <div id="smooth-content">
+    <header> 
+        <span class="logo">logo</span>
+        <a href="">home</a>
+        <a href="">ff</a>
+        <a href="">gg</a>
+        <a href="">ff</a>
+        <a href="">gg</a>
+    </header>
+    <div class="section">القسم 1</div>
+    <div class="section">القسم 2</div>
+    <div class="section">القسم 3</div>
+    <div class="section">القسم 4</div>
+    <div class="section">القسم 5</div>
+  </div>
+
+<script>
+  // ============================================
+  // Smooth Scroll يدوي (نفس فكرة عمل Lenis من الداخل)
+  // ============================================
+
+  const content = document.getElementById('smooth-content');
+
+  let currentScroll = 0;   // الموقع الحالي (المعروض فعليًا)
+  let targetScroll = 0;    // الموقع المطلوب الوصول له (حسب لف الماوس)
+  const ease = 0.08;       // كل ما قل الرقم صار السكرول "أبطأ وأنعم" (جرب 0.05 - 0.15)
+
+  // أقصى مسافة سكرول = ارتفاع المحتوى - ارتفاع الشاشة
+  function getMaxScroll() {
+    return content.scrollHeight - window.innerHeight;
+  }
+
+  // عند لف عجلة الماوس، نزيد/ننقص targetScroll بدل ما نخلي المتصفح يسكرول فعليًا
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    targetScroll += e.deltaY;
+    targetScroll = Math.max(0, Math.min(targetScroll, getMaxScroll()));
+  }, { passive: false });
+
+  // حلقة الأنيميشن: كل فريم نقرّب currentScroll من targetScroll تدريجيًا (lerp)
+  function animate() {
+    currentScroll += (targetScroll - currentScroll) * ease;
+
+    // لو الفرق صغير جدًا نخليه يساوي الهدف تمامًا (يمنع اهتزاز لانهائي)
+    if (Math.abs(targetScroll - currentScroll) < 0.05) {
+      currentScroll = targetScroll;
+    }
+
+    content.style.transform = `translateY(${-currentScroll}px)`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  // دعم شاشات اللمس (تراكباد/موبايل) - سكرول عادي بس نحدث targetScroll
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    const touchY = e.touches[0].clientY;
+    const delta = touchStartY - touchY;
+    targetScroll += delta * 1.5;
+    targetScroll = Math.max(0, Math.min(targetScroll, getMaxScroll()));
+    touchStartY = touchY;
+  }, { passive: true });
+</script>
+
+</body>
+</html>
