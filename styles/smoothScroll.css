@@ -1,0 +1,14 @@
+/* Smooth scroll wrapper - يلف المحتوى ويحركه بـ transform */
+#smooth-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  will-change: transform;
+}
+
+/* spacer فاضي يعطي body ارتفاع حقيقي عشان شريط السكرول يشتغل طبيعي */
+#smooth-spacer {
+  width: 100%;
+  pointer-events: none;
+}

@@ -1,0 +1,30 @@
+@font-face {
+    font-family: "fontOneBold";
+    src: url(font/IBMPlexSansArabic-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: "fontOneRegular";
+    src: url(font/IBMPlexSansArabic-Regular.ttf) format('truetype');
+}
+@font-face {
+    font-family: "fontOneMedium";
+    src: url(font/IBMPlexSansArabic-Medium.ttf) format('truetype')  ;
+}
+@font-face {
+    font-family: "fontTwoBold";
+    src: url(font/Tajawal-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: "fontTwoRegular";
+    src: url(font/Tajawal-Regular.ttf) format('truetype');
+}
+@font-face {
+    font-family: "notoArabic";
+    src: url(font/NotoSansArabic-Thin.ttf) format('truetype');
+}
+@font-face {
+    font-family: "notoArabicBlod";
+    src: url(font/NotoSansArabic-Bold.ttf)  format("truetype") ;
+}
